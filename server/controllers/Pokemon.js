@@ -3,11 +3,11 @@ const pokemonCards = require('pokemontcgsdk');
 const getPokemon = (req, res) => {
   let pokelist = [];
 
-  pokemonCards.card.where({ page: 1, pageSize: 30})
-  .then(cards => {
+  pokemonCards.card.where({ page: 1, pageSize: 30 })
+    .then((cards) => {
       pokelist = cards;
       res.json({ pokemon: pokelist });
-  });
+    });
 };
 
 const pokePage = (req, res) => {

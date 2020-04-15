@@ -2,9 +2,9 @@
 
 var Header = function Header(props) {
   return (/*#__PURE__*/React.createElement("div", {
-      "class": "Jumbotron"
+      className: "header"
     }, /*#__PURE__*/React.createElement("h1", {
-      id: "title"
+      className: "title"
     }, "PokePricer"), /*#__PURE__*/React.createElement("p", null, "Find all the cards your collection needs!"))
   );
 };

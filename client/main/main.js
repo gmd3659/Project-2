@@ -1,13 +1,11 @@
 const Header = (props) => {
   return(
-    <div class="Jumbotron">
-      <h1 id="title">PokePricer</h1>
+    <div className="header">
+      <h1 className="title">PokePricer</h1>
       <p>Find all the cards your collection needs!</p>
     </div>
   );
 };
-
-
 
 
 const PokeList = (props) => {
