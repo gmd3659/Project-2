@@ -55,18 +55,21 @@ const DomoList = function(props) {
   
   const domoNodes = props.domos.map(function(domo) {
     return(
-      <div key={domo._id} className="domo">
-        <img src="/assets/img/domoface.jpeg" alt="domo face" className="domoFace" />
-        <h3 className="domoName">Name: {domo.name} </h3>
-        <h3 className = "domoLevel">Level: {domo.level} </h3>
-        <h3 className ="domoAge">Age: {domo.age} </h3>
-        <input className="deleteSubmit" type="submit" value="Delete Domo" onClick={deleteDomo(domo)}/>
+      <div key={domo._id} class="card" style="width 20rem;">
+        <img src="/assets/img/domoface.jpeg" alt="domo face" class="card-img-top" />
+        <div class="card-body">
+          <h3 className="domoName">Name: {domo.name} </h3>
+          <h3 className = "domoLevel">Level: {domo.level} </h3>
+          <h3 className ="domoAge">Age: {domo.age} </h3>
+          <input className="deleteSubmit" type="submit" value="Delete Domo" onClick={deleteDomo(domo)}/>
+        </div>
       </div>
     );
   });
   
   return (
     <div className="domoList">
+      <h3>Favorites:</h3>
       {domoNodes}
     </div>
   );

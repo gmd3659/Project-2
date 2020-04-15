@@ -76,12 +76,15 @@ var DomoList = function DomoList(props) {
   var domoNodes = props.domos.map(function (domo) {
     return (/*#__PURE__*/React.createElement("div", {
         key: domo._id,
-        className: "domo"
+        "class": "card",
+        style: "width 20rem;"
       }, /*#__PURE__*/React.createElement("img", {
         src: "/assets/img/domoface.jpeg",
         alt: "domo face",
-        className: "domoFace"
-      }), /*#__PURE__*/React.createElement("h3", {
+        "class": "card-img-top"
+      }), /*#__PURE__*/React.createElement("div", {
+        "class": "card-body"
+      }, /*#__PURE__*/React.createElement("h3", {
         className: "domoName"
       }, "Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
         className: "domoLevel"
@@ -92,12 +95,12 @@ var DomoList = function DomoList(props) {
         type: "submit",
         value: "Delete Domo",
         onClick: deleteDomo(domo)
-      }))
+      })))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {
       className: "domoList"
-    }, domoNodes)
+    }, /*#__PURE__*/React.createElement("h3", null, "Favorites:"), domoNodes)
   );
 };
 

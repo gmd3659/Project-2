@@ -1,0 +1,7 @@
+*.iml
+*.ipr
+*.iws
+*.ids
+.DS_Store
+.idea/
+node_modules/
