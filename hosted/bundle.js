@@ -1,13 +1,24 @@
 "use strict";
 
+var Header = function Header(props) {
+  return (/*#__PURE__*/React.createElement("div", {
+      "class": "Jumbotron"
+    }, /*#__PURE__*/React.createElement("h1", {
+      id: "title"
+    }, "PokePricer"), /*#__PURE__*/React.createElement("p", null, "Find all the cards your collection needs!"))
+  );
+};
+
 var PokeList = function PokeList(props) {
-  if (props.pokemon.length === 0) {
+  console.log(props.pokemon);
+
+  if (props.pokemon === null) {
     return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, "No Pokemon Found"))
     );
   }
 
   var pokeNodes = props.pokemon.map(function (poke) {
-    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, poke.name, " - ", poke.types[0]))
+    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, poke.name))
     );
   });
   return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Favorite Pokemon!"), pokeNodes)
@@ -17,12 +28,13 @@ var PokeList = function PokeList(props) {
 var loadPokemonFromServer = function loadPokemonFromServer() {
   sendAjax('GET', '/getPokemon', null, function (data) {
     ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
-      pokemon: data.pokemon.cards
+      pokemon: data.pokemon
     }), document.querySelector("#pokemon"));
   });
 };
 
 var setup = function setup(csrf) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(Header, null), document.querySelector("#header"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
     pokemon: []
   }), document.querySelector("#pokemon"));

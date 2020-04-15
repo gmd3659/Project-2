@@ -1,5 +1,18 @@
+const Header = (props) => {
+  return(
+    <div class="Jumbotron">
+      <h1 id="title">PokePricer</h1>
+      <p>Find all the cards your collection needs!</p>
+    </div>
+  );
+};
+
+
+
+
 const PokeList = (props) => {
-  if(props.pokemon.length === 0){
+  console.log(props.pokemon);
+  if(props.pokemon === null){
     return(
       <div>
         <h3>No Pokemon Found</h3>
@@ -10,7 +23,7 @@ const PokeList = (props) => {
   const pokeNodes = props.pokemon.map((poke) => {
       return(
         <div>
-          <h3>{poke.name} - {poke.types[0]}</h3>
+          <h3>{poke.name}</h3>
         </div>
       );
   });
@@ -26,12 +39,17 @@ const PokeList = (props) => {
 const loadPokemonFromServer = () => {
   sendAjax('GET', '/getPokemon', null, (data) => {
     ReactDOM.render(
-      <PokeList pokemon={data.pokemon.cards}/>, document.querySelector("#pokemon")
+      <PokeList pokemon={data.pokemon}/>, document.querySelector("#pokemon")
     );
   });
 };
 
 const setup = function(csrf) {
+  
+  ReactDOM.render(
+    <Header />, document.querySelector("#header")
+  );
+  
   ReactDOM.render(
     <PokeList pokemon={[]} />, document.querySelector("#pokemon")
   );
