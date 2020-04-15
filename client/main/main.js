@@ -7,10 +7,10 @@ const PokeList = (props) => {
     );
   }
   
-  const pokeNodes = props.pokemon.map((pokemon) =>{
+  const pokeNodes = props.pokemon.map((poke) => {
       return(
         <div>
-          <h3>{props.name} - {props.type}</h3>
+          <h3>{poke.name} - {poke.types[0]}</h3>
         </div>
       );
   });
@@ -26,14 +26,14 @@ const PokeList = (props) => {
 const loadPokemonFromServer = () => {
   sendAjax('GET', '/getPokemon', null, (data) => {
     ReactDOM.render(
-      <PokeList pokemon={data.pokemon}/>, document.querySelector("#pokemon")
+      <PokeList pokemon={data.pokemon.cards}/>, document.querySelector("#pokemon")
     );
   });
 };
 
 const setup = function(csrf) {
   ReactDOM.render(
-    <PokeContainer pokemon={[]} />, document.querySelector("#pokemon")
+    <PokeList pokemon={[]} />, document.querySelector("#pokemon")
   );
   
   loadPokemonFromServer();
