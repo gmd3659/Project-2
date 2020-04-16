@@ -28,9 +28,16 @@ const Search = (props) => {
           method="GET"
           className="searchForm"
     >
-    <label htmlFor="search">Find any cards: </label>
-    <input id="search" type="text" name="search" placeholder="Charizard" />
-    <input className="searchSubmit" type="submit" value="Search"/>
+      <label htmlFor="search">Find any cards: </label>
+      <input id="search" type="text" name="search" placeholder="Charizard" />
+      <input className="searchSubmit" type="submit" value="Search"/>
+      <label for="numResults">Number of Results:</label>
+      <select id="numResults" name="numResults">
+        <option value="10" selected>10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
     </form>
   );
 };
@@ -50,7 +57,7 @@ const PokeList = (props) => {
       return(
         <div>
           <h3>{poke.name}</h3>
-          <img href={poke.imageURL} ></img>
+          <img src={poke.imageUrl}/>
         </div>
       );
   });

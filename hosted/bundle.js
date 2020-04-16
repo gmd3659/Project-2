@@ -38,7 +38,21 @@ var Search = function Search(props) {
       className: "searchSubmit",
       type: "submit",
       value: "Search"
-    }))
+    }), /*#__PURE__*/React.createElement("label", {
+      "for": "numResults"
+    }, "Number of Results:"), /*#__PURE__*/React.createElement("select", {
+      id: "numResults",
+      name: "numResults"
+    }, /*#__PURE__*/React.createElement("option", {
+      value: "10",
+      selected: true
+    }, "10"), /*#__PURE__*/React.createElement("option", {
+      value: "25"
+    }, "25"), /*#__PURE__*/React.createElement("option", {
+      value: "50"
+    }, "50"), /*#__PURE__*/React.createElement("option", {
+      value: "100"
+    }, "100")))
   );
 };
 
@@ -52,7 +66,7 @@ var PokeList = function PokeList(props) {
 
   var pokeNodes = props.pokemon.map(function (poke) {
     return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, poke.name), /*#__PURE__*/React.createElement("img", {
-        href: poke.imageURL
+        src: poke.imageUrl
       }))
     );
   });

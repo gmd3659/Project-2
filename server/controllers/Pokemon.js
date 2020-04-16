@@ -4,7 +4,7 @@ const pokemonCards = require('pokemontcgsdk');
 const getPokemon = (req, res) => {
   let pokelist = [{}];
 
-  pokemonCards.card.where({ page: 1, pageSize: 30 })
+  pokemonCards.card.where({ page: 1, pageSize: 20 })
     .then((cards) => {
       pokelist = cards;
       res.json({ pokemon: pokelist });
@@ -13,19 +13,18 @@ const getPokemon = (req, res) => {
 
 const searchCards = (req, res) => {
   const searchList = [{}];
+  const numResults = req.query.numResults;
   
   const term = req.query.search;
-  console.dir(term);
-
+  
   pokemonCards.card.all({ name: term })
     .on('data', (card) => {
-      console.log(card.name);
-      if (searchList.length < 30) {
+      if (searchList.length < numResults) {
         searchList.push(card);
       }
     });
     
-    setTimeout(() => {res.json({ pokemon: searchList })}, 2000);
+    setTimeout(() => {res.json({ pokemon: searchList })}, 4000);
 };
 
 const pokePage = (req, res) => {
