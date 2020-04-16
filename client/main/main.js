@@ -12,7 +12,7 @@ const handleSearch = (e) => {
   
   sendAjax('GET', '/searchCards', $("#searchForm").serialize(), (data) => {
     ReactDOM.render(
-      <PokeList pokemon={data.pokemon}/>, document.querySelector("#pokemon")
+      <PokeList pokemon={data.pokemon}/>, document.querySelector("#content")
     );
   });
   
@@ -73,7 +73,7 @@ const PokeList = (props) => {
 const loadPokemonFromServer = () => {
   sendAjax('GET', '/getPokemon', null, (data) => {
     ReactDOM.render(
-      <PokeList pokemon={data.pokemon}/>, document.querySelector("#pokemon")
+      <PokeList pokemon={data.pokemon}/>, document.querySelector("#content")
     );
   });
 };
@@ -89,7 +89,7 @@ const setup = function(csrf) {
   );
   
   ReactDOM.render(
-    <PokeList pokemon={[]} />, document.querySelector("#pokemon")
+    <PokeList pokemon={[]} />, document.querySelector("#content")
   );
   
   loadPokemonFromServer();

@@ -14,7 +14,7 @@ var handleSearch = function handleSearch(e) {
   sendAjax('GET', '/searchCards', $("#searchForm").serialize(), function (data) {
     ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
       pokemon: data.pokemon
-    }), document.querySelector("#pokemon"));
+    }), document.querySelector("#content"));
   });
   return false;
 };
@@ -78,7 +78,7 @@ var loadPokemonFromServer = function loadPokemonFromServer() {
   sendAjax('GET', '/getPokemon', null, function (data) {
     ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
       pokemon: data.pokemon
-    }), document.querySelector("#pokemon"));
+    }), document.querySelector("#content"));
   });
 };
 
@@ -87,7 +87,7 @@ var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(Search, null), document.querySelector("#search"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
     pokemon: []
-  }), document.querySelector("#pokemon"));
+  }), document.querySelector("#content"));
   loadPokemonFromServer();
 };
 

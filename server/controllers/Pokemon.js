@@ -13,18 +13,18 @@ const getPokemon = (req, res) => {
 
 const searchCards = (req, res) => {
   const searchList = [{}];
-  const numResults = req.query.numResults;
-  
+  const { numResults } = req.query;
+
   const term = req.query.search;
-  
+
   pokemonCards.card.all({ name: term })
     .on('data', (card) => {
       if (searchList.length < numResults) {
         searchList.push(card);
       }
     });
-    
-    setTimeout(() => {res.json({ pokemon: searchList })}, 4000);
+
+  setTimeout(() => { res.json({ pokemon: searchList }); }, 4000);
 };
 
 const pokePage = (req, res) => {
