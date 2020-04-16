@@ -6,6 +6,7 @@ const router = (app) => {
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
   app.get('/getPokemon', mid.requiresSecure, controllers.Pokemon.getPokemon);
   app.get('/pokePage', mid.requiresSecure, controllers.Pokemon.pokePage);
+  app.get('/searchCards', mid.requiresSecure, controllers.Pokemon.searchCards);
   app.get('/getDomos', mid.requiresLogin, controllers.Domo.getDomos);
   app.get('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.loginPage);
   app.post('/login', mid.requiresSecure, mid.requiresLogout, controllers.Account.login);

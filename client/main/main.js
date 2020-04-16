@@ -7,10 +7,38 @@ const Header = (props) => {
   );
 };
 
+const handleSearch = (e) => {
+  e.preventDefault();
+  
+  sendAjax('GET', '/searchCards', $("#searchForm").serialize(), (data) => {
+    ReactDOM.render(
+      <PokeList pokemon={data.pokemon}/>, document.querySelector("#pokemon")
+    );
+  });
+  
+  return false;
+}
+
+const Search = (props) => {
+  return(
+    <form id="searchForm"
+          name="searchForm"
+          onSubmit={handleSearch}
+          action="/searchCards"
+          method="GET"
+          className="searchForm"
+    >
+    <label htmlFor="search">Find any cards: </label>
+    <input id="search" type="text" name="search" placeholder="Charizard" />
+    <input className="searchSubmit" type="submit" value="Search"/>
+    </form>
+  );
+};
+
 
 const PokeList = (props) => {
   console.log(props.pokemon);
-  if(props.pokemon === null){
+  if(props.pokemon === null || props.pokemon.length === 0){
     return(
       <div>
         <h3>No Pokemon Found</h3>
@@ -22,13 +50,14 @@ const PokeList = (props) => {
       return(
         <div>
           <h3>{poke.name}</h3>
+          <img href={poke.imageURL} ></img>
         </div>
       );
   });
   
   return(
     <div>
-      <h1>My Favorite Pokemon!</h1>
+      <h1>Pokemon Cards:</h1>
       {pokeNodes}
     </div>
   );
@@ -46,6 +75,10 @@ const setup = function(csrf) {
   
   ReactDOM.render(
     <Header />, document.querySelector("#header")
+  );
+  
+  ReactDOM.render(
+    <Search />, document.querySelector("#search")
   );
   
   ReactDOM.render(

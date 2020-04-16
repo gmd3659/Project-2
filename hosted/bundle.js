@@ -9,19 +9,54 @@ var Header = function Header(props) {
   );
 };
 
+var handleSearch = function handleSearch(e) {
+  e.preventDefault();
+  sendAjax('GET', '/searchCards', $("#searchForm").serialize(), function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
+      pokemon: data.pokemon
+    }), document.querySelector("#pokemon"));
+  });
+  return false;
+};
+
+var Search = function Search(props) {
+  return (/*#__PURE__*/React.createElement("form", {
+      id: "searchForm",
+      name: "searchForm",
+      onSubmit: handleSearch,
+      action: "/searchCards",
+      method: "GET",
+      className: "searchForm"
+    }, /*#__PURE__*/React.createElement("label", {
+      htmlFor: "search"
+    }, "Find any cards: "), /*#__PURE__*/React.createElement("input", {
+      id: "search",
+      type: "text",
+      name: "search",
+      placeholder: "Charizard"
+    }), /*#__PURE__*/React.createElement("input", {
+      className: "searchSubmit",
+      type: "submit",
+      value: "Search"
+    }))
+  );
+};
+
 var PokeList = function PokeList(props) {
   console.log(props.pokemon);
 
-  if (props.pokemon === null) {
+  if (props.pokemon === null || props.pokemon.length === 0) {
     return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, "No Pokemon Found"))
     );
   }
 
   var pokeNodes = props.pokemon.map(function (poke) {
-    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, poke.name))
+    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, poke.name), /*#__PURE__*/React.createElement("img", {
+        href: poke.imageURL
+      }))
     );
   });
-  return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "My Favorite Pokemon!"), pokeNodes)
+  return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Pokemon Cards:"), pokeNodes)
   );
 };
 
@@ -35,6 +70,7 @@ var loadPokemonFromServer = function loadPokemonFromServer() {
 
 var setup = function setup(csrf) {
   ReactDOM.render( /*#__PURE__*/React.createElement(Header, null), document.querySelector("#header"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(Search, null), document.querySelector("#search"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
     pokemon: []
   }), document.querySelector("#pokemon"));
