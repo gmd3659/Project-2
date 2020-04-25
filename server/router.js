@@ -4,6 +4,7 @@ const mid = require('./middleware');
 const router = (app) => {
   // app.post('/delete', mid.requiresLogin, controllers.Domo.)
   app.get('/getToken', mid.requiresSecure, controllers.Account.getToken);
+  app.get('/getBearer', mid.requiresSecure, controllers.Pokemon.requestBearerToken);
   app.get('/getPokemon', mid.requiresSecure, controllers.Pokemon.getPokemon);
   app.get('/pokePage', mid.requiresSecure, controllers.Pokemon.pokePage);
   app.get('/searchCards', mid.requiresSecure, controllers.Pokemon.searchCards);

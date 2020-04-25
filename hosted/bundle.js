@@ -82,7 +82,14 @@ var loadPokemonFromServer = function loadPokemonFromServer() {
   });
 };
 
+var requestBearerToken = function requestBearerToken() {
+  sendAjax('GET', '/getBearer', null, function (data) {
+    console.log(data.userName);
+  });
+};
+
 var setup = function setup(csrf) {
+  requestBearerToken();
   ReactDOM.render( /*#__PURE__*/React.createElement(Header, null), document.querySelector("#header"));
   ReactDOM.render( /*#__PURE__*/React.createElement(Search, null), document.querySelector("#search"));
   ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {

@@ -7,6 +7,8 @@ const Header = (props) => {
   );
 };
 
+
+
 const handleSearch = (e) => {
   e.preventDefault();
   
@@ -78,7 +80,15 @@ const loadPokemonFromServer = () => {
   });
 };
 
+const requestBearerToken = () => {
+  sendAjax('GET', '/getBearer', null, (data) => {
+    console.log(data.userName);
+  });
+};
+
 const setup = function(csrf) {
+  
+  requestBearerToken();
   
   ReactDOM.render(
     <Header />, document.querySelector("#header")
