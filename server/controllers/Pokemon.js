@@ -13,7 +13,7 @@ const getPokemon = (req, res) => {
 
 const searchCards = (req, res) => {
   const searchList = [{}];
-  const { numResults } = req.query;
+  const numResults = req.query.numResults;
 
   const term = req.query.search;
 
