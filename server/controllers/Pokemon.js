@@ -1,22 +1,26 @@
 const pokemonCards = require('pokemontcgsdk');
-const extraRequest = require('request');
+const fetch = require('node-fetch');
 
 let token = {};
 
-const requestBearerToken = (req, res) => {
-  const body = 'grant_type=client_credentials&client_id=80f4290e-727a-4b81-b467-0e764bfb6c5d&client_secret=41df591c-f37e-41ad-8863-cb0c581ac230';
-  extraRequest.post('https://api.tcgplayer.com/token', body, { headers: { 'Content-Type': 'text/plain' } })
-    .then((response) => {
-      token = response.data;
-      res.json({ bearerToken: response.data });
+const requestBearerToken = (res) => {
+  const url = 'https://api.tcgplayer.com/token';
 
-    // do more stuff here
-    })
-    .catch((error) => {
-      console.log(error);
+  const options = {
+    method: 'POST',
+    headers: {
+      Accept: 'application.json',
+      'Content-Type': 'application/json;charset=UTF-8',
+    },
+    body: 'grant_type=client_credentials&client_id=80f4290e-727a-4b81-b467-0e764bfb6c5d&client_secret=41df591c-f37e-41ad-8863-cb0c581ac230',
+  };
+
+  fetch(url, options)
+    .then((response) => response.json())
+    .then((json) => function () {
+      token = json.access_token;
+      res.json({ status: json.status });
     });
-
-  res.json({ bearerToken: 'No token found' });
 };
 
 const getPokemon = (req, res) => {
@@ -40,9 +44,10 @@ const searchCards = (req, res) => {
       if (searchList.length < numResults) {
         searchList.push(card);
       }
+    })
+    .on('end', () => {
+      res.json({ pokemon: searchList });
     });
-
-  setTimeout(() => { res.json({ pokemon: searchList }); }, 4000);
 };
 
 const pokePage = (req, res) => {

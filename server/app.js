@@ -11,7 +11,6 @@ const RedisStore = require('connect-redis')(session);
 const url = require('url');
 const csrf = require('csurf');
 const redis = require('redis');
-const bearerToken = require('express-bearer-token');
 
 const port = process.env.PORT || process.env.NODE_PORT || 3000;
 
@@ -51,14 +50,6 @@ const app = express();
 app.use('/assets', express.static(path.resolve(`${__dirname}/../hosted/`)));
 app.use(favicon(`${__dirname}/../hosted/img/favicon.png`));
 app.use(compression());
-// can be accessed using req.token
-app.use(bearerToken({
-  bodyKey: 'access_token',
-  queryKey: 'access_token',
-  headerKey: 'Bearer',
-  reqKey: 'token',
-  cookie: false, // by default is disabled
-}));
 app.use(bodyParser.urlencoded({
   extended: true,
 }));
