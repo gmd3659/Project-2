@@ -1,101 +1,125 @@
 "use strict";
 
-var Header = function Header(props) {
-  return (/*#__PURE__*/React.createElement("div", {
-      className: "header"
-    }, /*#__PURE__*/React.createElement("h1", {
-      className: "title"
-    }, "PokePricer"), /*#__PURE__*/React.createElement("p", null, "Find all the cards your collection needs!"))
-  );
-};
-
-var handleSearch = function handleSearch(e) {
+var handleDomo = function handleDomo(e) {
   e.preventDefault();
-  sendAjax('GET', '/searchCards', $("#searchForm").serialize(), function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
-      pokemon: data.pokemon
-    }), document.querySelector("#content"));
+  $("#domoMessage").animate({
+    width: 'hide'
+  }, 350);
+
+  if ($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == '') {
+    handleError('RAWR! All fields are required');
+    return false;
+  }
+
+  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function () {
+    loadDomosFromServer();
   });
   return false;
 };
 
-var Search = function Search(props) {
+var deleteDomo = function deleteDomo(domo) {
+  //sendAjax('POST', "/maker", null, domo);
+  console.dir("Domo Deleted");
+};
+
+var DomoForm = function DomoForm(props) {
   return (/*#__PURE__*/React.createElement("form", {
-      id: "searchForm",
-      name: "searchForm",
-      onSubmit: handleSearch,
-      action: "/searchCards",
-      method: "GET",
-      className: "searchForm"
+      id: "domoForm",
+      onSubmit: handleDomo,
+      name: "domoForm",
+      action: "/maker",
+      method: "POST",
+      className: "domoForm"
     }, /*#__PURE__*/React.createElement("label", {
-      htmlFor: "search"
-    }, "Find any cards: "), /*#__PURE__*/React.createElement("input", {
-      id: "search",
+      htmlFor: "name"
+    }, "Name: "), /*#__PURE__*/React.createElement("input", {
+      id: "domoName",
       type: "text",
-      name: "search",
-      placeholder: "Charizard"
-    }), /*#__PURE__*/React.createElement("input", {
-      className: "searchSubmit",
-      type: "submit",
-      value: "Search"
+      name: "name",
+      placeholder: "Domo Name"
     }), /*#__PURE__*/React.createElement("label", {
-      "for": "numResults"
-    }, "Number of Results:"), /*#__PURE__*/React.createElement("select", {
-      id: "numResults",
-      name: "numResults"
-    }, /*#__PURE__*/React.createElement("option", {
-      value: "10",
-      selected: true
-    }, "10"), /*#__PURE__*/React.createElement("option", {
-      value: "25"
-    }, "25"), /*#__PURE__*/React.createElement("option", {
-      value: "50"
-    }, "50"), /*#__PURE__*/React.createElement("option", {
-      value: "100"
-    }, "100")))
+      htmlFor: "age"
+    }, "Age: "), /*#__PURE__*/React.createElement("input", {
+      id: "domoAge",
+      type: "text",
+      name: "age",
+      placeholder: "Domo Age"
+    }), /*#__PURE__*/React.createElement("label", {
+      htmlFor: "level"
+    }, "Level: "), /*#__PURE__*/React.createElement("input", {
+      id: "domoLevel",
+      type: "text",
+      name: "level",
+      placeholder: "0-100"
+    }), /*#__PURE__*/React.createElement("input", {
+      type: "hidden",
+      name: "_csrf",
+      value: props.csrf
+    }), /*#__PURE__*/React.createElement("input", {
+      className: "makeDomoSubmit",
+      type: "submit",
+      value: "Make Domo"
+    }))
   );
 };
 
-var PokeList = function PokeList(props) {
-  console.log(props.pokemon);
-
-  if (props.pokemon === null || props.pokemon.length === 0) {
-    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, "No Pokemon Found"))
+var DomoList = function DomoList(props) {
+  if (props.pokemon.length === 0) {
+    return (/*#__PURE__*/React.createElement("div", {
+        className: "domoList"
+      }, /*#__PURE__*/React.createElement("h3", {
+        className: "emptyDomo"
+      }, "No Domos yet"))
     );
   }
 
-  var pokeNodes = props.pokemon.map(function (poke) {
-    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, poke.name), /*#__PURE__*/React.createElement("img", {
-        src: poke.imageUrl
-      }))
+  var domoNodes = props.domos.map(function (domo) {
+    return (/*#__PURE__*/React.createElement("div", {
+        key: domo._id,
+        "class": "card",
+        style: "width 20rem;"
+      }, /*#__PURE__*/React.createElement("img", {
+        src: "/assets/img/domoface.jpeg",
+        alt: "domo face",
+        "class": "card-img-top"
+      }), /*#__PURE__*/React.createElement("div", {
+        "class": "card-body"
+      }, /*#__PURE__*/React.createElement("h3", {
+        className: "domoName"
+      }, "Name: ", domo.name, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "domoLevel"
+      }, "Level: ", domo.level, " "), /*#__PURE__*/React.createElement("h3", {
+        className: "domoAge"
+      }, "Age: ", domo.age, " "), /*#__PURE__*/React.createElement("input", {
+        className: "deleteSubmit",
+        type: "submit",
+        value: "Delete Domo",
+        onClick: deleteDomo(domo)
+      })))
     );
   });
-  return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Pokemon Cards:"), pokeNodes)
+  return (/*#__PURE__*/React.createElement("div", {
+      className: "domoList"
+    }, /*#__PURE__*/React.createElement("h3", null, "Favorites:"), domoNodes)
   );
 };
 
-var loadPokemonFromServer = function loadPokemonFromServer() {
-  sendAjax('GET', '/getPokemon', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
-      pokemon: data.pokemon
-    }), document.querySelector("#content"));
-  });
-};
-
-var requestBearerToken = function requestBearerToken() {
-  sendAjax('GET', '/getBearer', null, function (data) {
-    console.log(data.userName);
+var loadDomosFromServer = function loadDomosFromServer() {
+  sendAjax('GET', '/getDomos', null, function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
+      domos: data.domos
+    }), document.querySelector("#domos"));
   });
 };
 
 var setup = function setup(csrf) {
-  requestBearerToken();
-  ReactDOM.render( /*#__PURE__*/React.createElement(Header, null), document.querySelector("#header"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(Search, null), document.querySelector("#search"));
-  ReactDOM.render( /*#__PURE__*/React.createElement(PokeList, {
-    pokemon: []
-  }), document.querySelector("#content"));
-  loadPokemonFromServer();
+  ReactDOM.render( /*#__PURE__*/React.createElement(DomoForm, {
+    csrf: csrf
+  }), document.querySelector("#makeDomo"));
+  ReactDOM.render( /*#__PURE__*/React.createElement(DomoList, {
+    domos: []
+  }), document.querySelector("#domos"));
+  loadDomosFromServer();
 };
 
 var getToken = function getToken() {

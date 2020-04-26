@@ -6,7 +6,7 @@
     "npm": "6.13.7"
   },
   "description": "A website where information can be found about the prices of pokemon cards",
-  "main": "./server/app.js",
+  "main": "./server/main.js",
   "scripts": {
     "buildLoginBundle": "babel ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
     "buildAppBundle": "babel ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
@@ -26,7 +26,7 @@
     "Redis",
     "Login"
   ],
-  "author": "Cody Van De Mark",
+  "author": "Gavin DeWitt",
   "license": "Apache 2.0",
   "devDependencies": {
     "@babel/cli": "^7.8.4",

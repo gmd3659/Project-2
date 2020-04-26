@@ -23,6 +23,26 @@ const requestBearerToken = (res) => {
     });
 };
 
+/*const getPrices = (searchForThese) => {
+  
+  let options = {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      Authorization: `bearer ${token}`,
+    }
+  };
+  
+  foreach(card in searchForThese) {
+    
+  }
+  
+  let url = `http://api.tcgplayer.com/v1.37.0/catalog/products/base5-20?getExtendedFields=true`
+  
+  return fetch(url, options);
+  
+};*/
+
 const getPokemon = (req, res) => {
   let pokelist = [{}];
 
@@ -44,10 +64,17 @@ const searchCards = (req, res) => {
       if (searchList.length < numResults) {
         searchList.push(card);
       }
-    })
-    .on('end', () => {
-      res.json({ pokemon: searchList });
     });
+  
+  setTimeout( function() {
+    
+    /*if (searchList.length != 0){
+      let priceInfo = getPrices(searchList);
+      console.log(priceInfo);
+    }*/
+    
+    res.json({ pokemon: searchList })
+  } , 4000);
 };
 
 const pokePage = (req, res) => {
