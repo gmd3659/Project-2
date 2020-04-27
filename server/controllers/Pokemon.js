@@ -1,7 +1,7 @@
 const pokemonCards = require('pokemontcgsdk');
 const fetch = require('node-fetch');
 
-let token = {};
+// let token = {};
 
 const requestBearerToken = (res) => {
   const url = 'https://api.tcgplayer.com/token';
@@ -18,13 +18,13 @@ const requestBearerToken = (res) => {
   fetch(url, options)
     .then((response) => response.json())
     .then((json) => function () {
-      token = json.access_token;
+      // token = json.access_token;
       res.json({ status: json.status });
     });
 };
 
-/*const getPrices = (searchForThese) => {
-  
+/* const getPrices = (searchForThese) => {
+
   let options = {
     method: 'GET',
     headers: {
@@ -32,16 +32,16 @@ const requestBearerToken = (res) => {
       Authorization: `bearer ${token}`,
     }
   };
-  
+
   foreach(card in searchForThese) {
-    
+
   }
-  
+
   let url = `http://api.tcgplayer.com/v1.37.0/catalog/products/base5-20?getExtendedFields=true`
-  
+
   return fetch(url, options);
-  
-};*/
+
+}; */
 
 const getPokemon = (req, res) => {
   let pokelist = [{}];
@@ -65,16 +65,15 @@ const searchCards = (req, res) => {
         searchList.push(card);
       }
     });
-  
-  setTimeout( function() {
-    
-    /*if (searchList.length != 0){
+
+  setTimeout(() => {
+    /* if (searchList.length != 0){
       let priceInfo = getPrices(searchList);
       console.log(priceInfo);
-    }*/
-    
-    res.json({ pokemon: searchList })
-  } , 4000);
+    } */
+
+    res.json({ pokemon: searchList });
+  }, 4000);
 };
 
 const pokePage = (req, res) => {

@@ -7,6 +7,39 @@ const Header = (props) => {
   );
 };
 
+const NavBar = (props) => {
+  
+  return(
+      <div>
+        <nav><a href="/main"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
+          <div class="navlink"><a id="loginButton" href="/profile">Profile</a></div>
+          <div class="navlink"><a id="signupButton" href="/signout">Sign Out</a></div>
+        </nav>
+      </div>
+    );
+  
+  /*if (prop.loggedIn === 'true')
+  {
+    return(
+      <div>
+        <nav><a href="/main"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
+          <div class="navlink"><a id="loginButton" href="/profile">Profile</a></div>
+          <div class="navlink"><a id="signupButton" href="/signout">Sign Out</a></div>
+        </nav>
+      </div>
+    );
+  }else{
+    return(
+      <div>
+        <nav><a href="/login"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
+          <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
+          <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
+        </nav>
+      </div>
+    );
+  }*/
+};
+
 
 
 const handleSearch = (e) => {
@@ -44,6 +77,14 @@ const Search = (props) => {
   );
 };
 
+const handleFavorite = (e) => {
+  e.preventDefault();
+  
+  sendAjax('POST', '/addFavorite', $("#cardForm").serialize(), (null))
+  
+  return false;
+};
+
 
 const PokeList = (props) => {
   console.log(props.pokemon);
@@ -58,8 +99,14 @@ const PokeList = (props) => {
   const pokeNodes = props.pokemon.map((poke) => {
       return(
         <div>
-          <h3>{poke.name}</h3>
-          <img src={poke.imageUrl}/>
+          <form
+             id="cardForm"
+             onSubmit={handleFavorite}
+           >
+            <h3 name="name">{poke.name}</h3>
+            <img name="image" src={poke.imageUrl}/>
+            <input type="submit" value="Favorite"/>
+          </form>
         </div>
       );
   });
@@ -89,6 +136,10 @@ const requestBearerToken = () => {
 const setup = function(csrf) {
   
   requestBearerToken();
+  
+  ReactDom.render(
+    <NavBar />, document.querySelector("#navbar")
+  );
   
   ReactDOM.render(
     <Header />, document.querySelector("#header")

@@ -16,10 +16,17 @@ const DomoSchema = new mongoose.Schema({
     set: setName,
   },
 
-  id: {
-    type: String,
-    require: true,
-    trim: true,
+  age: {
+    type: Number,
+    min: 0,
+    required: true,
+  },
+
+  level: {
+    type: Number,
+    min: 0,
+    max: 100,
+    required: true,
   },
 
   owner: {
