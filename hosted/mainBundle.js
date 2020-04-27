@@ -9,13 +9,19 @@ var Header = function Header(props) {
   );
 };
 
-var NavBar = function NavBar(props) {
-  var loggedIn = {};
-  sendAjax('GET', '/loggedIn', null, function (data) {
-    loggedIn = data.loggedIn;
-  });
+var loggedIn = {};
+var token = {};
 
-  if (loggedIn === true) {
+var checkLogin = function checkLogin(csrf) {
+  sendAjax('GET', '/loggedIn', null, function (data) {
+    console.log(data);
+    loggedIn = data.loggedIn;
+    setup(csrf);
+  });
+};
+
+var NavBar = function NavBar(props) {
+  if (loggedIn === 1) {
     return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("nav", null, /*#__PURE__*/React.createElement("a", {
         href: "/main"
       }, /*#__PURE__*/React.createElement("img", {
@@ -31,7 +37,7 @@ var NavBar = function NavBar(props) {
         className: "navlink"
       }, /*#__PURE__*/React.createElement("a", {
         id: "signupButton",
-        href: "/signout"
+        href: "/logout"
       }, "Sign Out"))))
     );
   } else {
@@ -110,8 +116,7 @@ var handleFavorite = function handleFavorite(e) {
 };
 
 var PokeList = function PokeList(props) {
-  console.log(props.pokemon);
-
+  //console.log(props.pokemon);
   if (props.pokemon === null || props.pokemon.length === 0) {
     return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h3", null, "No Pokemon Found"))
     );
@@ -126,6 +131,10 @@ var PokeList = function PokeList(props) {
       }, poke.name), /*#__PURE__*/React.createElement("img", {
         name: "image",
         src: poke.imageUrl
+      }), /*#__PURE__*/React.createElement("input", {
+        type: "hidden",
+        name: "_csrf",
+        value: token
       }), /*#__PURE__*/React.createElement("input", {
         type: "submit",
         value: "Favorite"
@@ -163,7 +172,8 @@ var setup = function setup(csrf) {
 
 var getToken = function getToken() {
   sendAjax('GET', '/getToken', null, function (result) {
-    setup(result.csrfToken);
+    token = result.csrfToken;
+    checkLogin(result.csrfToken);
   });
 };
 

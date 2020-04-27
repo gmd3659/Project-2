@@ -14,6 +14,7 @@ const profilePage = (req, res) => {
 };
 
 const addFavorite = (req, res) => {
+
   const pokeData = {
     name: req.body.name,
     id: req.body.id,

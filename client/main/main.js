@@ -7,39 +7,41 @@ const Header = (props) => {
   );
 };
 
-const NavBar = (props) => {
-  
-  return(
-      <div>
-        <nav><a href="/main"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
-          <div class="navlink"><a id="loginButton" href="/profile">Profile</a></div>
-          <div class="navlink"><a id="signupButton" href="/signout">Sign Out</a></div>
-        </nav>
-      </div>
-    );
-  
-  /*if (prop.loggedIn === 'true')
-  {
-    return(
-      <div>
-        <nav><a href="/main"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
-          <div class="navlink"><a id="loginButton" href="/profile">Profile</a></div>
-          <div class="navlink"><a id="signupButton" href="/signout">Sign Out</a></div>
-        </nav>
-      </div>
-    );
-  }else{
-    return(
-      <div>
-        <nav><a href="/login"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
-          <div class="navlink"><a id="loginButton" href="/login">Login</a></div>
-          <div class="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
-        </nav>
-      </div>
-    );
-  }*/
+let loggedIn = {};
+let token = {};
+
+const checkLogin = (csrf) => {
+  sendAjax('GET', '/loggedIn', null, (data) => {
+            console.log(data);
+           loggedIn = data.loggedIn;
+          setup(csrf);
+  });
 };
 
+const NavBar = (props) => {
+  
+    if (loggedIn === 1)
+                {
+                  return(
+                    <div>
+                      <nav><a href="/main"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
+                        <div className="navlink"><a id="loginButton" href="/maker">Profile</a></div>
+                        <div className="navlink"><a id="signupButton" href="/logout">Sign Out</a></div>
+                      </nav>
+                    </div>
+                  );
+                }else{
+                  return(
+                    <div>
+                      <nav><a href="/login"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
+                        <div className="navlink"><a id="loginButton" href='/login'>Login</a></div>
+                        <div className="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
+                      </nav>
+                    </div>
+                  );
+                }
+  
+  };
 
 
 const handleSearch = (e) => {
@@ -87,7 +89,7 @@ const handleFavorite = (e) => {
 
 
 const PokeList = (props) => {
-  console.log(props.pokemon);
+  //console.log(props.pokemon);
   if(props.pokemon === null || props.pokemon.length === 0){
     return(
       <div>
@@ -102,9 +104,11 @@ const PokeList = (props) => {
           <form
              id="cardForm"
              onSubmit={handleFavorite}
+             
            >
             <h3 name="name">{poke.name}</h3>
             <img name="image" src={poke.imageUrl}/>
+            <input type="hidden" name="_csrf" value={token}/>
             <input type="submit" value="Favorite"/>
           </form>
         </div>
@@ -127,22 +131,22 @@ const loadPokemonFromServer = () => {
   });
 };
 
-const requestBearerToken = () => {
+/*const requestBearerToken = () => {
   sendAjax('GET', '/getBearer', null, (data) => {
     console.log(data.userName);
   });
-};
+};*/
 
 const setup = function(csrf) {
   
-  requestBearerToken();
-  
-  ReactDom.render(
-    <NavBar />, document.querySelector("#navbar")
-  );
+  //requestBearerToken();
   
   ReactDOM.render(
     <Header />, document.querySelector("#header")
+  );
+  
+  ReactDOM.render(
+    <NavBar />, document.querySelector("#navbar")
   );
   
   ReactDOM.render(
@@ -158,7 +162,8 @@ const setup = function(csrf) {
 
 const getToken = () => {
   sendAjax('GET', '/getToken', null, (result) => {
-    setup(result.csrfToken);
+    token = result.csrfToken;
+    checkLogin(result.csrfToken);
   });
 };
 

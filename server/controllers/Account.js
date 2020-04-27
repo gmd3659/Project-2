@@ -3,7 +3,18 @@ const models = require('../models');
 const { Account } = models;
 
 const loginPage = (req, res) => {
+  console.log('Going to login page');
   res.render('login', { csrfToken: req.csrfToken() });
+};
+
+const checkLoggedIn = (req, res) => {
+  console.log(req.session.account);
+
+  if (req.session.account) {
+    return res.json({ loggedIn: 1 });
+  }
+
+  return res.json({ loggedIn: 0 });
 };
 
 const logout = (req, res) => {
@@ -19,7 +30,7 @@ const login = (request, response) => {
   const password = `${req.body.pass}`;
 
   if (!username || !password) {
-    return res.status(400).json({ error: 'RAWR! All fields are required!' });
+    return res.status(400).json({ error: 'All fields are required!' });
   }
 
   return Account.AccountModel.authenticate(username, password, (err, account) => {
@@ -29,7 +40,7 @@ const login = (request, response) => {
 
     req.session.account = Account.AccountModel.toAPI(account);
 
-    return res.json({ redirect: '/main' });
+    return res.json({ redirect: '/pokePage' });
   });
 };
 
@@ -62,7 +73,7 @@ const signup = (request, response) => {
 
     savePromise.then(() => {
       req.session.account = Account.AccountModel.toAPI(newAccount);
-      return res.json({ loggedIn: 'true', redirect: '/main' });
+      return res.json({ loggedIn: 'true', redirect: '/pokePage' });
     });
 
     savePromise.catch((err) => {
@@ -92,4 +103,5 @@ module.exports.loginPage = loginPage;
 module.exports.login = login;
 module.exports.logout = logout;
 module.exports.signup = signup;
+module.exports.checkLoggedIn = checkLoggedIn;
 module.exports.getToken = getToken;
