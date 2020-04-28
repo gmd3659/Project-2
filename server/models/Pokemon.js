@@ -48,12 +48,14 @@ PokeSchema.statics.findByOwner = (ownerId, callback) => {
   return PokeModel.find(search).select('name image id').lean().exec(callback);
 };
 
-PokeSchema.statics.deleteFavorite = (pokeId, callback) => {
+PokeSchema.statics.deleteFavorite = (data, callback) => {
+  console.log(data);
+
   const search = {
-    owner: convertId(pokiId.owner),
+    owner: convertId(data.owner),
   };
 
-  return PokeModel.find(search).deleteOne({ _id: pokiId._id }, callback);
+  return PokeModel.find(search).deleteOne({ _id: data._id }, callback);
 };
 
 PokeModel = mongoose.model('Poke', PokeSchema);

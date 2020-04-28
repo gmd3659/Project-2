@@ -1,42 +1,45 @@
+let token = {};
+
 const deleteFavorite = (poke) => {
   
-  sendAjax('POST', "/deleteFav", poke, null);
+  sendAjax('POST', "/deleteFav", $(`#${poke}`).serialize(), null);
   
   console.dir("Favorite Deleted");
 };
 
-let token = {};
-
 const FavoritesList = function(props) {
-  console.log(props);
   if(props.pokes.length === 0) {
     return(
-      <div className="domoList">
-        <h3 className="emptyDomo">No Favorites yet</h3>
+      <div className="pokeList">
+        <h3 className="emptyPoke">No Favorites yet</h3>
       </div>
     );
   }
   
   const favoriteNodes = props.pokes.map(function(poke) {
     return(
-      <div key={poke.owner} className="card">
+      <form 
+        id={poke._id}
+       className="card"
+       onSubmit={e => {
+              e.preventDefault();
+              deleteFavorite(poke._id);
+            }
+          }
+       
+       >
         <img src={poke.image} alt="poke image" class="card-img-top" />
         <div class="card-body">
-          <h3 className="domoName">Name: {poke.name} </h3>
+          <h3 className="pokeName">Name: {poke.name} </h3>
           <input type="hidden" name="_csrf" value={token}/>
-          <input className="deleteSubmit" type="submit" value="Remove Favorite" onClick={e => {
-              e.preventDefault();
-              console.log(poke.owner);
-              deleteFavorite(poke);
-            }
-          }/>
+          <input className="deleteSubmit" type="submit" value="Remove Favorite"/>
         </div>
-      </div>
+      </form>
     );
   });
   
   return (
-    <div className="domoList">
+    <div className="pokeList">
       <h3>Favorites:</h3>
       {favoriteNodes}
     </div>

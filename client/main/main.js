@@ -117,7 +117,6 @@ const PokeList = (props) => {
               <h3 name="name">{poke.name}</h3>
               <img name="image" src={poke.imageUrl}/>
               <input type="hidden" name="name" value={poke.name}/>
-              <input type="hidden" name="owner" value={poke.owner}/>
               <input type="hidden" name="imageUrl" value={poke.imageUrl}/>
               <input type="hidden" name="_csrf" value={token}/>
               <input type="submit" value="Favorite"/>

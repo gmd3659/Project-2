@@ -139,10 +139,6 @@ var PokeList = function PokeList(props) {
           value: poke.name
         }), /*#__PURE__*/React.createElement("input", {
           type: "hidden",
-          name: "owner",
-          value: poke.owner
-        }), /*#__PURE__*/React.createElement("input", {
-          type: "hidden",
           name: "imageUrl",
           value: poke.imageUrl
         }), /*#__PURE__*/React.createElement("input", {
@@ -215,13 +211,13 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#pokeMessage").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("domoMessage").animate({
+  $("pokeMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;

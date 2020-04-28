@@ -1,28 +1,30 @@
 "use strict";
 
+var token = {};
+
 var deleteFavorite = function deleteFavorite(poke) {
-  sendAjax('POST', "/deleteFav", poke, null);
+  sendAjax('POST', "/deleteFav", $("#".concat(poke)).serialize(), null);
   console.dir("Favorite Deleted");
 };
 
-var token = {};
-
 var FavoritesList = function FavoritesList(props) {
-  console.log(props);
-
   if (props.pokes.length === 0) {
     return (/*#__PURE__*/React.createElement("div", {
-        className: "domoList"
+        className: "pokeList"
       }, /*#__PURE__*/React.createElement("h3", {
-        className: "emptyDomo"
+        className: "emptyPoke"
       }, "No Favorites yet"))
     );
   }
 
   var favoriteNodes = props.pokes.map(function (poke) {
-    return (/*#__PURE__*/React.createElement("div", {
-        key: poke.owner,
-        className: "card"
+    return (/*#__PURE__*/React.createElement("form", {
+        id: poke._id,
+        className: "card",
+        onSubmit: function onSubmit(e) {
+          e.preventDefault();
+          deleteFavorite(poke._id);
+        }
       }, /*#__PURE__*/React.createElement("img", {
         src: poke.image,
         alt: "poke image",
@@ -30,7 +32,7 @@ var FavoritesList = function FavoritesList(props) {
       }), /*#__PURE__*/React.createElement("div", {
         "class": "card-body"
       }, /*#__PURE__*/React.createElement("h3", {
-        className: "domoName"
+        className: "pokeName"
       }, "Name: ", poke.name, " "), /*#__PURE__*/React.createElement("input", {
         type: "hidden",
         name: "_csrf",
@@ -38,17 +40,12 @@ var FavoritesList = function FavoritesList(props) {
       }), /*#__PURE__*/React.createElement("input", {
         className: "deleteSubmit",
         type: "submit",
-        value: "Remove Favorite",
-        onClick: function onClick(e) {
-          e.preventDefault();
-          console.log(poke.owner);
-          deleteFavorite(poke);
-        }
+        value: "Remove Favorite"
       })))
     );
   });
   return (/*#__PURE__*/React.createElement("div", {
-      className: "domoList"
+      className: "pokeList"
     }, /*#__PURE__*/React.createElement("h3", null, "Favorites:"), favoriteNodes)
   );
 };
@@ -83,13 +80,13 @@ $(document).ready(function () {
 
 var handleError = function handleError(message) {
   $("#errorMessage").text(message);
-  $("#domoMessage").animate({
+  $("#pokeMessage").animate({
     width: 'toggle'
   }, 350);
 };
 
 var redirect = function redirect(response) {
-  $("domoMessage").animate({
+  $("pokeMessage").animate({
     width: 'hide'
   }, 350);
   window.location = response.redirect;

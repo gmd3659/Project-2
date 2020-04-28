@@ -55,18 +55,16 @@ const getFavorites = (request, response) => {
 };
 
 const deleteFavorite = (req, res) => {
-  
   console.log(req.body);
 
-  Pokemon.PokeModel.deleteFavorite = (req, err, docs) => {
+  Pokemon.PokeModel.deleteFavorite = (req.body, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-    
+
     return res.json({ pokes: docs });
-  };
-  
+  });
 };
 
 module.exports.profilePage = profilePage;
