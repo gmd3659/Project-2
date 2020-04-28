@@ -1,28 +1,14 @@
-const handleDomo = (e) => {
-  e.preventDefault();
+const deleteFavorite = (poke) => {
   
-  $("#domoMessage").animate({width:'hide'}, 350);
+  sendAjax('POST', "/deleteFav", poke, null);
   
-  if($("#domoName").val() == '' || $("#domoAge").val() == '' || $("#domoLevel").val() == '') {
-    handleError('RAWR! All fields are required');
-    return false;
-  }
-  
-  sendAjax('POST', $("#domoForm").attr("action"), $("#domoForm").serialize(), function(){
-    loadDomosFromServer();
-  });
-  
-  return false;
+  console.dir("Favorite Deleted");
 };
 
-const deleteFavorite = (domo) => {
-  
-  //sendAjax('POST', "/maker", null, domo);
-  
-  console.dir("Domo Deleted");
-};
+let token = {};
 
 const FavoritesList = function(props) {
+  console.log(props);
   if(props.pokes.length === 0) {
     return(
       <div className="domoList">
@@ -31,13 +17,19 @@ const FavoritesList = function(props) {
     );
   }
   
-  const favoriteNodes = props.pokes.map(function(domo) {
+  const favoriteNodes = props.pokes.map(function(poke) {
     return(
-      <div key={pokes._id} class="card" style="width 20rem;">
-        <img src={pokes.image} alt="poke image" class="card-img-top" />
+      <div key={poke.owner} className="card">
+        <img src={poke.image} alt="poke image" class="card-img-top" />
         <div class="card-body">
           <h3 className="domoName">Name: {poke.name} </h3>
-          <input className="deleteSubmit" type="submit" value="Remove Favorite" onClick=""/>
+          <input type="hidden" name="_csrf" value={token}/>
+          <input className="deleteSubmit" type="submit" value="Remove Favorite" onClick={e => {
+              e.preventDefault();
+              console.log(poke.owner);
+              deleteFavorite(poke);
+            }
+          }/>
         </div>
       </div>
     );
@@ -46,15 +38,16 @@ const FavoritesList = function(props) {
   return (
     <div className="domoList">
       <h3>Favorites:</h3>
-      {pokeNodes}
+      {favoriteNodes}
     </div>
   );
 };
 
 const loadFavoritesFromServer = () => {
   sendAjax('GET', '/getFavorites', null, (data) => {
+    console.log(data);
     ReactDOM.render(
-      <PokeList pokes={data.pokes}/>, document.querySelector("#favorites")
+      <FavoritesList pokes={data.pokes}/>, document.querySelector("#favorites")
     );
   });
 };
@@ -62,7 +55,7 @@ const loadFavoritesFromServer = () => {
 const setup = function() {
   
   ReactDOM.render(
-    <PokeList pokes={[]} />, document.querySelector("#favorites")
+    <FavoritesList pokes={[]} />, document.querySelector("#favorites")
   );
   
   loadFavoritesFromServer();
@@ -70,6 +63,7 @@ const setup = function() {
 
 const getToken = () => {
   sendAjax('GET', '/getToken', null, (result) => {
+    token = result.csrfToken;
     setup(result.csrfToken);
   });
 };

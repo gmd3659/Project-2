@@ -88,6 +88,19 @@ nav:nth-child(1) {
     background-color: #f00000;
 }
 
+#pokeCards {
+  width: 1000px;
+  height: inherit;
+}
+
+.cardForm {
+  display: inline-block;
+  border: 2px solid #338acc;
+  height: 400px;
+  width: 23%;
+  padding: 1%
+}
+
 .domoForm {
     border: 2px solid #338acc;
     height: 35px;

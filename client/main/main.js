@@ -25,7 +25,7 @@ const NavBar = (props) => {
                   return(
                     <div>
                       <nav><a href="/main"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
-                        <div className="navlink"><a id="loginButton" href="/maker">Profile</a></div>
+                        <div className="navlink"><a id="loginButton" href="/profile">Profile</a></div>
                         <div className="navlink"><a id="signupButton" href="/logout">Sign Out</a></div>
                       </nav>
                     </div>
@@ -35,7 +35,6 @@ const NavBar = (props) => {
                     <div>
                       <nav><a href="/login"><img id="logo" src="/assets/img/Pokeball.png" alt="face logo"/></a>
                         <div className="navlink"><a id="loginButton" href='/login'>Login</a></div>
-                        <div className="navlink"><a id="signupButton" href="/signup">Sign up</a></div>
                       </nav>
                     </div>
                   );
@@ -79,10 +78,11 @@ const Search = (props) => {
   );
 };
 
-const handleFavorite = (e) => {
-  e.preventDefault();
+const handleFavorite = (pokeId) => {
   
-  sendAjax('POST', '/addFavorite', $("#cardForm").serialize(), (null))
+  sendAjax('POST', '/addFavorite', $(`#${pokeId}`).serialize(), (data) => {
+    console.log(data);
+  });
   
   return false;
 };
@@ -99,20 +99,47 @@ const PokeList = (props) => {
   }
   
   const pokeNodes = props.pokemon.map((poke) => {
-      return(
-        <div>
-          <form
-             id="cardForm"
-             onSubmit={handleFavorite}
-             
-           >
-            <h3 name="name">{poke.name}</h3>
-            <img name="image" src={poke.imageUrl}/>
-            <input type="hidden" name="_csrf" value={token}/>
-            <input type="submit" value="Favorite"/>
-          </form>
-        </div>
-      );
+    
+      if (loggedIn) {
+        return(
+          <div>
+            <form
+               id={poke.id}
+               name="cardForm"
+               className="cardForm"
+               onSubmit={e => {
+                                e.preventDefault();
+                                handleFavorite(poke.id);
+                              }
+                        }
+
+             >
+              <h3 name="name">{poke.name}</h3>
+              <img name="image" src={poke.imageUrl}/>
+              <input type="hidden" name="name" value={poke.name}/>
+              <input type="hidden" name="owner" value={poke.owner}/>
+              <input type="hidden" name="imageUrl" value={poke.imageUrl}/>
+              <input type="hidden" name="_csrf" value={token}/>
+              <input type="submit" value="Favorite"/>
+            </form>
+          </div>
+        );
+      } else {
+        return(
+          <div>
+            <form
+               id="cardForm"
+               name="cardForm"
+               className="cardForm"
+
+             >
+              <h3 name="name">{poke.name}</h3>
+              <img name="image" src={poke.imageUrl}/>
+              <input type="hidden" name="_csrf" value={token}/>
+            </form>
+          </div>
+        );
+      }
   });
   
   return(

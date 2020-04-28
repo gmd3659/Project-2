@@ -32,7 +32,7 @@ var NavBar = function NavBar(props) {
         className: "navlink"
       }, /*#__PURE__*/React.createElement("a", {
         id: "loginButton",
-        href: "/maker"
+        href: "/profile"
       }, "Profile")), /*#__PURE__*/React.createElement("div", {
         className: "navlink"
       }, /*#__PURE__*/React.createElement("a", {
@@ -52,12 +52,7 @@ var NavBar = function NavBar(props) {
       }, /*#__PURE__*/React.createElement("a", {
         id: "loginButton",
         href: "/login"
-      }, "Login")), /*#__PURE__*/React.createElement("div", {
-        className: "navlink"
-      }, /*#__PURE__*/React.createElement("a", {
-        id: "signupButton",
-        href: "/signup"
-      }, "Sign up"))))
+      }, "Login"))))
     );
   }
 };
@@ -109,9 +104,10 @@ var Search = function Search(props) {
   );
 };
 
-var handleFavorite = function handleFavorite(e) {
-  e.preventDefault();
-  sendAjax('POST', '/addFavorite', $("#cardForm").serialize(), null);
+var handleFavorite = function handleFavorite(pokeId) {
+  sendAjax('POST', '/addFavorite', $("#".concat(pokeId)).serialize(), function (data) {
+    console.log(data);
+  });
   return false;
 };
 
@@ -123,23 +119,58 @@ var PokeList = function PokeList(props) {
   }
 
   var pokeNodes = props.pokemon.map(function (poke) {
-    return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("form", {
-        id: "cardForm",
-        onSubmit: handleFavorite
-      }, /*#__PURE__*/React.createElement("h3", {
-        name: "name"
-      }, poke.name), /*#__PURE__*/React.createElement("img", {
-        name: "image",
-        src: poke.imageUrl
-      }), /*#__PURE__*/React.createElement("input", {
-        type: "hidden",
-        name: "_csrf",
-        value: token
-      }), /*#__PURE__*/React.createElement("input", {
-        type: "submit",
-        value: "Favorite"
-      })))
-    );
+    if (loggedIn) {
+      return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("form", {
+          id: poke.id,
+          name: "cardForm",
+          className: "cardForm",
+          onSubmit: function onSubmit(e) {
+            e.preventDefault();
+            handleFavorite(poke.id);
+          }
+        }, /*#__PURE__*/React.createElement("h3", {
+          name: "name"
+        }, poke.name), /*#__PURE__*/React.createElement("img", {
+          name: "image",
+          src: poke.imageUrl
+        }), /*#__PURE__*/React.createElement("input", {
+          type: "hidden",
+          name: "name",
+          value: poke.name
+        }), /*#__PURE__*/React.createElement("input", {
+          type: "hidden",
+          name: "owner",
+          value: poke.owner
+        }), /*#__PURE__*/React.createElement("input", {
+          type: "hidden",
+          name: "imageUrl",
+          value: poke.imageUrl
+        }), /*#__PURE__*/React.createElement("input", {
+          type: "hidden",
+          name: "_csrf",
+          value: token
+        }), /*#__PURE__*/React.createElement("input", {
+          type: "submit",
+          value: "Favorite"
+        })))
+      );
+    } else {
+      return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("form", {
+          id: "cardForm",
+          name: "cardForm",
+          className: "cardForm"
+        }, /*#__PURE__*/React.createElement("h3", {
+          name: "name"
+        }, poke.name), /*#__PURE__*/React.createElement("img", {
+          name: "image",
+          src: poke.imageUrl
+        }), /*#__PURE__*/React.createElement("input", {
+          type: "hidden",
+          name: "_csrf",
+          value: token
+        })))
+      );
+    }
   });
   return (/*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("h1", null, "Pokemon Cards:"), pokeNodes)
   );

@@ -1,29 +1,28 @@
 const models = require('../models');
 
-const { Poke } = models;
+const { Pokemon } = models;
 
 const profilePage = (req, res) => {
-  Poke.PokeModel.findByOwner(req.session.account._id, (err, docs) => {
+  Pokemon.PokeModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
 
-    return res.render('profile', { csrfToken: req.csrfToken(), pokes: docs });
+    return res.render('app', { csrfToken: req.csrfToken(), pokes: docs });
   });
 };
 
 const addFavorite = (req, res) => {
+  console.log(req.body.name);
 
   const pokeData = {
     name: req.body.name,
-    id: req.body.id,
+    image: req.body.imageUrl,
     owner: req.session.account._id,
   };
 
-  console.dir(req.body.name);
-
-  const newPoke = new Poke.PokeModel(pokeData);
+  const newPoke = new Pokemon.PokeModel(pokeData);
 
   const pokePromise = newPoke.save();
 
@@ -45,7 +44,7 @@ const getFavorites = (request, response) => {
   const req = request;
   const res = response;
 
-  return Poke.PokeModel.findByOwner(req.session.account._id, (err, docs) => {
+  return Pokemon.PokeModel.findByOwner(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
@@ -55,6 +54,22 @@ const getFavorites = (request, response) => {
   });
 };
 
+const deleteFavorite = (req, res) => {
+  
+  console.log(req.body);
+
+  Pokemon.PokeModel.deleteFavorite = (req, err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+    
+    return res.json({ pokes: docs });
+  };
+  
+};
+
 module.exports.profilePage = profilePage;
 module.exports.addFavorite = addFavorite;
 module.exports.getFavorites = getFavorites;
+module.exports.deleteFavorite = deleteFavorite;
